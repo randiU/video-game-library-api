@@ -22,6 +22,214 @@
           }
         }
       }
+    },
+    "/games": {
+      "get": {
+        "summary": "Get all games",
+        "description": "Returns all video game records.",
+        "responses": {
+          "200": {
+            "description": "Games returned successfully."
+          },
+          "500": {
+            "description": "Failed to get games."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a game",
+        "description": "Creates a new video game record.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Game created successfully."
+          },
+          "400": {
+            "description": "Invalid game data."
+          }
+        }
+      }
+    },
+    "/games/{id}": {
+      "get": {
+        "summary": "Get a game by ID",
+        "description": "Returns one video game record by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the game.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game returned successfully."
+          },
+          "400": {
+            "description": "Invalid game ID format."
+          },
+          "404": {
+            "description": "Game not found."
+          },
+          "500": {
+            "description": "Failed to get game."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a game",
+        "description": "Updates one video game record by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the game.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Game updated successfully."
+          },
+          "400": {
+            "description": "Invalid game ID or invalid game data."
+          },
+          "404": {
+            "description": "Game not found."
+          },
+          "500": {
+            "description": "Failed to update game."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a game",
+        "description": "Deletes one video game record by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the game.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game deleted successfully."
+          },
+          "400": {
+            "description": "Invalid game ID format."
+          },
+          "404": {
+            "description": "Game not found."
+          },
+          "500": {
+            "description": "Failed to delete game."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GameInput": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "developer",
+          "publisher",
+          "releaseYear",
+          "genre",
+          "platforms",
+          "playerCount",
+          "multiplayer",
+          "ageRating",
+          "gameStyle"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "The Legend of Zelda: Breath of the Wild"
+          },
+          "description": {
+            "type": "string",
+            "example": "An open-world adventure game focused on exploration and puzzle solving."
+          },
+          "developer": {
+            "type": "string",
+            "example": "Nintendo"
+          },
+          "publisher": {
+            "type": "string",
+            "example": "Nintendo"
+          },
+          "releaseYear": {
+            "type": "number",
+            "example": 2017
+          },
+          "genre": {
+            "type": "string",
+            "example": "Action-adventure"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Nintendo Switch", "Wii U"]
+          },
+          "playerCount": {
+            "type": "string",
+            "example": "1"
+          },
+          "multiplayer": {
+            "type": "boolean",
+            "example": false
+          },
+          "ageRating": {
+            "type": "string",
+            "example": "E10+"
+          },
+          "gameStyle": {
+            "type": "string",
+            "example": "Open world"
+          },
+          "averageRating": {
+            "type": "number",
+            "example": 9.7
+          }
+        }
+      }
     }
   }
 }
