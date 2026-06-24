@@ -157,6 +157,276 @@
           }
         }
       }
+    },
+    "/genres": {
+      "get": {
+        "summary": "Get all genres",
+        "description": "Returns all video game genres.",
+        "responses": {
+          "200": {
+            "description": "Genres returned successfully."
+          },
+          "500": {
+            "description": "Failed to get genres."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a genre",
+        "description": "Creates a new video game genre.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Genre created successfully."
+          },
+          "400": {
+            "description": "Invalid genre data."
+          }
+        }
+      }
+    },
+    "/genres/{id}": {
+      "get": {
+        "summary": "Get a genre by ID",
+        "description": "Returns one genre by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the genre.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre returned successfully."
+          },
+          "400": {
+            "description": "Invalid genre ID format."
+          },
+          "404": {
+            "description": "Genre not found."
+          },
+          "500": {
+            "description": "Failed to get genre."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a genre",
+        "description": "Updates one genre by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the genre.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Genre updated successfully."
+          },
+          "400": {
+            "description": "Invalid genre ID or invalid genre data."
+          },
+          "404": {
+            "description": "Genre not found."
+          },
+          "500": {
+            "description": "Failed to update genre."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a genre",
+        "description": "Deletes one genre by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the genre.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre deleted successfully."
+          },
+          "400": {
+            "description": "Invalid genre ID format."
+          },
+          "404": {
+            "description": "Genre not found."
+          },
+          "500": {
+            "description": "Failed to delete genre."
+          }
+        }
+      }
+    },
+    "/platforms": {
+      "get": {
+        "summary": "Get all platforms",
+        "description": "Returns all video game platforms.",
+        "responses": {
+          "200": {
+            "description": "Platforms returned successfully."
+          },
+          "500": {
+            "description": "Failed to get platforms."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a platform",
+        "description": "Creates a new video game platform.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Platform created successfully."
+          },
+          "400": {
+            "description": "Invalid platform data."
+          }
+        }
+      }
+    },
+    "/platforms/{id}": {
+      "get": {
+        "summary": "Get a platform by ID",
+        "description": "Returns one platform by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform returned successfully."
+          },
+          "400": {
+            "description": "Invalid platform ID format."
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Failed to get platform."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a platform",
+        "description": "Updates one platform by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Platform updated successfully."
+          },
+          "400": {
+            "description": "Invalid platform ID or invalid platform data."
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Failed to update platform."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a platform",
+        "description": "Deletes one platform by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform deleted successfully."
+          },
+          "400": {
+            "description": "Invalid platform ID format."
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Failed to delete platform."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -206,7 +476,10 @@
             "items": {
               "type": "string"
             },
-            "example": ["Nintendo Switch", "Wii U"]
+            "example": [
+              "Nintendo Switch",
+              "Wii U"
+            ]
           },
           "playerCount": {
             "type": "string",
@@ -227,6 +500,82 @@
           "averageRating": {
             "type": "number",
             "example": 9.7
+          }
+        }
+      },
+      "GenreInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "action",
+              "adventure",
+              "action-adventure",
+              "rpg",
+              "strategy",
+              "simulation",
+              "sports",
+              "racing",
+              "puzzle",
+              "platformer",
+              "shooter",
+              "fighting",
+              "horror",
+              "sandbox",
+              "party",
+              "educational"
+            ],
+            "example": "action-adventure"
+          },
+          "description": {
+            "type": "string",
+            "example": "Games that combine action gameplay with exploration, story, and adventure elements."
+          }
+        }
+      },
+      "PlatformInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "manufacturer",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "nintendo switch",
+              "playstation 5",
+              "playstation 4",
+              "xbox series x/s",
+              "xbox one",
+              "pc",
+              "mobile",
+              "steam deck"
+            ],
+            "example": "nintendo switch"
+          },
+          "manufacturer": {
+            "type": "string",
+            "enum": [
+              "nintendo",
+              "sony",
+              "microsoft",
+              "valve",
+              "apple",
+              "google",
+              "various"
+            ],
+            "example": "nintendo"
+          },
+          "description": {
+            "type": "string",
+            "example": "A hybrid home and handheld gaming console from Nintendo."
           }
         }
       }

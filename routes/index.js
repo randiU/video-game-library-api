@@ -6,6 +6,8 @@ const { getHome } = require('../controllers/homeController');
 router.get('/', getHome);
 
 router.use('/games', require('./games'));
+router.use('/genres', require('./genres'));
+router.use('/platforms', require('./platforms'));
 router.use('/api-docs', require('./swagger'));
 
 module.exports = router;
