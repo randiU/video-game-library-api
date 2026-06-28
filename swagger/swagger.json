@@ -3,7 +3,7 @@
   "info": {
     "title": "Video Game Library API",
     "version": "1.0.0",
-    "description": "API documentation for the Video Game Library and Review API"
+    "description": "API documentation for the Video Game Library and Review API.\n\n## Authentication\n\nThis API uses Google OAuth. Log in by opening **[/auth/google](/auth/google)** in your browser (the Swagger \"Try it out\" button cannot follow the redirect to Google). After logging in you'll be returned here, and protected routes (POST/PUT/DELETE) will work via your session cookie.\n\n- **[Log in with Google](/auth/google)**\n- **[Check login status](/auth/status)**\n- **[Log out](/auth/logout)**"
   },
   "servers": [
     {
@@ -11,9 +11,236 @@
       "description": "Local development server"
     }
   ],
+  "tags": [
+    {
+      "name": "General",
+      "description": "General API status and information."
+    },
+    {
+      "name": "Auth",
+      "description": "Google OAuth login, logout, and session status."
+    },
+    {
+      "name": "Users",
+      "description": "Operations on registered user accounts."
+    },
+    {
+      "name": "Games",
+      "description": "Operations on the video game catalog."
+    },
+    {
+      "name": "Genres",
+      "description": "Operations on video game genres."
+    },
+    {
+      "name": "Platforms",
+      "description": "Operations on gaming platforms."
+    }
+  ],
   "paths": {
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Start Google login",
+        "description": "Redirects the browser to Google's OAuth consent screen. Open this URL directly in a browser; it cannot be tested with the Swagger 'Try it out' button because it issues a redirect.",
+        "responses": {
+          "302": {
+            "description": "Redirect to Google for authentication."
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google OAuth callback",
+        "description": "Google redirects here after the user approves access. On success the user is logged in and redirected to /api-docs.",
+        "responses": {
+          "302": {
+            "description": "Redirect to /api-docs on success, or /auth/failure on failure."
+          }
+        }
+      }
+    },
+    "/auth/status": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current login status",
+        "description": "Returns whether the current session is authenticated and, if so, the logged-in user.",
+        "responses": {
+          "200": {
+            "description": "Authentication status returned successfully."
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Log out",
+        "description": "Ends the current session and clears the session cookie.",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully."
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users",
+        "description": "Returns all registered user accounts.",
+        "responses": {
+          "200": {
+            "description": "Users returned successfully."
+          },
+          "500": {
+            "description": "Failed to get users."
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a user",
+        "description": "Creates a user account. Users are normally created automatically through Google OAuth; this route completes the CRUD set. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully."
+          },
+          "400": {
+            "description": "Invalid user data."
+          },
+          "401": {
+            "description": "Authentication required."
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get a user by ID",
+        "description": "Returns one user account by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the user.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User returned successfully."
+          },
+          "400": {
+            "description": "Invalid user ID format."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Failed to get user."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update a user",
+        "description": "Updates one user account by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the user.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully."
+          },
+          "400": {
+            "description": "Invalid user ID or invalid user data."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Failed to update user."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user",
+        "description": "Deletes one user account by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the user.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully."
+          },
+          "400": {
+            "description": "Invalid user ID format."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Failed to delete user."
+          }
+        }
+      }
+    },
     "/": {
       "get": {
+        "tags": ["General"],
         "summary": "API home route",
         "description": "Confirms that the Video Game Library API is running.",
         "responses": {
@@ -25,6 +252,7 @@
     },
     "/games": {
       "get": {
+        "tags": ["Games"],
         "summary": "Get all games",
         "description": "Returns all video game records.",
         "responses": {
@@ -37,6 +265,7 @@
         }
       },
       "post": {
+        "tags": ["Games"],
         "summary": "Create a game",
         "description": "Creates a new video game record.",
         "requestBody": {
@@ -61,6 +290,7 @@
     },
     "/games/{id}": {
       "get": {
+        "tags": ["Games"],
         "summary": "Get a game by ID",
         "description": "Returns one video game record by MongoDB ID.",
         "parameters": [
@@ -90,6 +320,7 @@
         }
       },
       "put": {
+        "tags": ["Games"],
         "summary": "Update a game",
         "description": "Updates one video game record by MongoDB ID.",
         "parameters": [
@@ -129,6 +360,7 @@
         }
       },
       "delete": {
+        "tags": ["Games"],
         "summary": "Delete a game",
         "description": "Deletes one video game record by MongoDB ID.",
         "parameters": [
@@ -157,10 +389,347 @@
           }
         }
       }
+    },
+    "/genres": {
+      "get": {
+        "tags": ["Genres"],
+        "summary": "Get all genres",
+        "description": "Returns all video game genres.",
+        "responses": {
+          "200": {
+            "description": "Genres returned successfully."
+          },
+          "500": {
+            "description": "Failed to get genres."
+          }
+        }
+      },
+      "post": {
+        "tags": ["Genres"],
+        "summary": "Create a genre",
+        "description": "Creates a new video game genre.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Genre created successfully."
+          },
+          "400": {
+            "description": "Invalid genre data."
+          }
+        }
+      }
+    },
+    "/genres/{id}": {
+      "get": {
+        "tags": ["Genres"],
+        "summary": "Get a genre by ID",
+        "description": "Returns one genre by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the genre.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre returned successfully."
+          },
+          "400": {
+            "description": "Invalid genre ID format."
+          },
+          "404": {
+            "description": "Genre not found."
+          },
+          "500": {
+            "description": "Failed to get genre."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Genres"],
+        "summary": "Update a genre",
+        "description": "Updates one genre by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the genre.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Genre updated successfully."
+          },
+          "400": {
+            "description": "Invalid genre ID or invalid genre data."
+          },
+          "404": {
+            "description": "Genre not found."
+          },
+          "500": {
+            "description": "Failed to update genre."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Genres"],
+        "summary": "Delete a genre",
+        "description": "Deletes one genre by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the genre.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre deleted successfully."
+          },
+          "400": {
+            "description": "Invalid genre ID format."
+          },
+          "404": {
+            "description": "Genre not found."
+          },
+          "500": {
+            "description": "Failed to delete genre."
+          }
+        }
+      }
+    },
+    "/platforms": {
+      "get": {
+        "tags": ["Platforms"],
+        "summary": "Get all platforms",
+        "description": "Returns all video game platforms.",
+        "responses": {
+          "200": {
+            "description": "Platforms returned successfully."
+          },
+          "500": {
+            "description": "Failed to get platforms."
+          }
+        }
+      },
+      "post": {
+        "tags": ["Platforms"],
+        "summary": "Create a platform",
+        "description": "Creates a new video game platform.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Platform created successfully."
+          },
+          "400": {
+            "description": "Invalid platform data."
+          }
+        }
+      }
+    },
+    "/platforms/{id}": {
+      "get": {
+        "tags": ["Platforms"],
+        "summary": "Get a platform by ID",
+        "description": "Returns one platform by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform returned successfully."
+          },
+          "400": {
+            "description": "Invalid platform ID format."
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Failed to get platform."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Platforms"],
+        "summary": "Update a platform",
+        "description": "Updates one platform by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Platform updated successfully."
+          },
+          "400": {
+            "description": "Invalid platform ID or invalid platform data."
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Failed to update platform."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Platforms"],
+        "summary": "Delete a platform",
+        "description": "Deletes one platform by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the platform.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform deleted successfully."
+          },
+          "400": {
+            "description": "Invalid platform ID format."
+          },
+          "404": {
+            "description": "Platform not found."
+          },
+          "500": {
+            "description": "Failed to delete platform."
+          }
+        }
+      }
     }
   },
   "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Session cookie set after logging in via Google OAuth at /auth/google."
+      }
+    },
     "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "665f1b2c9d3e4a0012ab34cd"
+          },
+          "googleId": {
+            "type": "string",
+            "example": "118273645019283746500"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Jane Gamer"
+          },
+          "email": {
+            "type": "string",
+            "example": "jane.gamer@example.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["user", "admin"],
+            "example": "user"
+          }
+        }
+      },
+      "UserInput": {
+        "type": "object",
+        "required": ["googleId", "displayName", "email"],
+        "properties": {
+          "googleId": {
+            "type": "string",
+            "example": "118273645019283746500"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Jane Gamer"
+          },
+          "email": {
+            "type": "string",
+            "example": "jane.gamer@example.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["user", "admin"],
+            "example": "user"
+          }
+        }
+      },
       "GameInput": {
         "type": "object",
         "required": [
@@ -206,7 +775,10 @@
             "items": {
               "type": "string"
             },
-            "example": ["Nintendo Switch", "Wii U"]
+            "example": [
+              "Nintendo Switch",
+              "Wii U"
+            ]
           },
           "playerCount": {
             "type": "string",
@@ -227,6 +799,82 @@
           "averageRating": {
             "type": "number",
             "example": 9.7
+          }
+        }
+      },
+      "GenreInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "action",
+              "adventure",
+              "action-adventure",
+              "rpg",
+              "strategy",
+              "simulation",
+              "sports",
+              "racing",
+              "puzzle",
+              "platformer",
+              "shooter",
+              "fighting",
+              "horror",
+              "sandbox",
+              "party",
+              "educational"
+            ],
+            "example": "action-adventure"
+          },
+          "description": {
+            "type": "string",
+            "example": "Games that combine action gameplay with exploration, story, and adventure elements."
+          }
+        }
+      },
+      "PlatformInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "manufacturer",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "nintendo switch",
+              "playstation 5",
+              "playstation 4",
+              "xbox series x/s",
+              "xbox one",
+              "pc",
+              "mobile",
+              "steam deck"
+            ],
+            "example": "nintendo switch"
+          },
+          "manufacturer": {
+            "type": "string",
+            "enum": [
+              "nintendo",
+              "sony",
+              "microsoft",
+              "valve",
+              "apple",
+              "google",
+              "various"
+            ],
+            "example": "nintendo"
+          },
+          "description": {
+            "type": "string",
+            "example": "A hybrid home and handheld gaming console from Nintendo."
           }
         }
       }
