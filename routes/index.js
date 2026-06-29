@@ -10,6 +10,8 @@ router.use('/users', require('./users'));
 router.use('/games', require('./games'));
 router.use('/genres', require('./genres'));
 router.use('/platforms', require('./platforms'));
+router.use('/reviews', require('./reviews'));
+router.use('/library', require('./userLibrary'));
 router.use('/api-docs', require('./swagger'));
 
 module.exports = router;

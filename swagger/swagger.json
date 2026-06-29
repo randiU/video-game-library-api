@@ -35,6 +35,10 @@
     {
       "name": "Platforms",
       "description": "Operations on gaming platforms."
+    },
+    {
+      "name": "Reviews",
+      "description": "Operations for user game reviews and ratings."
     }
   ],
   "paths": {
@@ -669,7 +673,154 @@
           }
         }
       }
+    },
+    "/reviews": {
+      "get": {
+       "tags": ["Reviews"],
+       "summary": "Get all reviews",
+        "description": "Returns all reviews with user and game references populated.",
+       "responses": {
+          "200": {
+           "description": "Reviews returned successfully."
+         },
+          "500": {
+            "description": "Failed to get reviews."
+         }
+       }
+     },
+      "post": {
+        "tags": ["Reviews"],
+       "summary": "Create a review",
+       "description": "Creates a new review. Requires authentication.",
+       "security": [{ "cookieAuth": [] }],
+       "requestBody": {
+          "required": true,
+          "content": {
+           "application/json": {
+             "schema": {
+               "type": "object",
+                "required": ["gameId", "rating"],
+               "properties": {
+                  "gameId": {
+                    "type": "string"
+                 },
+                 "rating": {
+                   "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                 },
+                 "reviewText": {
+                   "type": "string"
+                 },
+                 "recommend": {
+                   "type": "boolean"
+                  }   
+                }
+              }
+            }
+         }
+       },
+       "responses": {
+         "201": {
+           "description": "Review created successfully."
+         },
+         "400": {
+            "description": "Invalid review data."
+         },
+         "401": {
+           "description": "Authentication required."
+         }
+       }
+     }
+    },
+    "/reviews/{id}": {
+      "get": {
+       "tags": ["Reviews"],
+        "summary": "Get review by ID",
+       "parameters": [
+         {
+           "name": "id",
+           "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+           }
+         }
+       ],
+        "responses": {
+          "200": {
+           "description": "Review returned successfully."
+         },
+         "400": {
+            "description": "Invalid review ID format."
+          },
+          "404": {
+           "description": "Review not found."
+          }
+        }
+     },
+     "put": {
+       "tags": ["Reviews"],
+       "summary": "Update a review",
+       "security": [{ "cookieAuth": [] }],
+        "parameters": [
+         {
+            "name": "id",
+           "in": "path",
+           "required": true,
+            "schema": {
+              "type": "string"
+            }
+         }
+       ],
+       "requestBody": {
+          "required": true,
+         "content": {
+           "application/json": {
+             "$ref": "#/components/schemas/Review"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Review updated successfully."
+          },
+         "400": {
+            "description": "Invalid data."
+          },
+         "404": {
+            "description": "Review not found."
+          }
+       }
+      },
+     "delete": {
+       "tags": ["Reviews"],
+        "summary": "Delete a review",
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+           }
+         }
+        ],
+       "responses": {
+          "200": {
+            "description": "Review deleted successfully."
+         },
+          "400": {
+            "description": "Invalid review ID format."
+          },
+          "404": {
+            "description": "Review not found."
+          }
+        }
+     }
     }
+
   },
   "components": {
     "securitySchemes": {
@@ -704,6 +855,45 @@
             "type": "string",
             "enum": ["user", "admin"],
             "example": "user"
+          },
+          "Review": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "665f1b2c9d3e4a0012ab34cd"
+              },
+              "userId": {
+                "type": "string",
+                "example": "665f1b2c9d3e4a0012ab34aa"
+              },
+              "gameId": {
+                "type": "string",
+                "example": "665f1b2c9d3e4a0012ab34bb"
+              },
+             "rating": {
+               "type": "number",
+                "minimum": 1,
+                "maximum": 5,
+                "example": 5
+              },
+              "reviewText": {
+                "type": "string",
+                "example": "Amazing game!"
+              },
+             "recommend": {
+               "type": "boolean",
+               "example": true
+             },
+              "createdAt": {
+               "type": "string",
+                "format": "date-time"
+             },
+             "updatedAt": {
+                "type": "string",
+               "format": "date-time"
+             }
+            }
           }
         }
       },
