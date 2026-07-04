@@ -15,6 +15,9 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// trust Render's TLS proxy so secure cookies and req.protocol/IP work correctly
+app.set('trust proxy', 1);
+
 app.use(
   cors({
     origin: true,

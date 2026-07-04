@@ -7,6 +7,10 @@
   },
   "servers": [
     {
+      "url": "https://video-game-library-api-2rcc.onrender.com",
+      "description": "Render production server"
+    },
+    {
       "url": "http://localhost:8080",
       "description": "Local development server"
     }
