@@ -39,6 +39,10 @@
     {
       "name": "Reviews",
       "description": "Operations for user game reviews and ratings."
+    },
+    {
+      "name": "Library",
+      "description": "Operations for authenticated users' personal game libraries."
     }
   ],
   "paths": {
@@ -819,7 +823,173 @@
           }
         }
      }
+    },
+    
+    "/library": {
+      "get": {
+        "tags": ["Library"],
+        "summary": "Get all library entries",
+        "description": "Returns all personal library entries with user and game references populated.",
+        "responses": {
+          "200": {
+            "description": "Library entries returned successfully."
+          },
+          "500": {
+            "description": "Failed to get library entries."
+          }
+        }
+      },
+      "post": {
+        "tags": ["Library"],
+        "summary": "Create a library entry",
+        "description": "Adds a game to the logged-in user's personal library. Requires authentication. The user ID is taken from the authenticated session.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LibraryInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Library entry created successfully."
+          },
+          "400": {
+            "description": "Invalid library entry data."
+          },
+          "401": {
+            "description": "Authentication required."
+          }
+        }
+      }
+    },
+    "/library/{id}": {
+      "get": {
+        "tags": ["Library"],
+        "summary": "Get a library entry by ID",
+        "description": "Returns one personal library entry by MongoDB ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the library entry.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Library entry returned successfully."
+          },
+          "400": {
+            "description": "Invalid library entry ID format."
+          },
+          "404": {
+            "description": "Library entry not found."
+          },
+          "500": {
+            "description": "Failed to get library entry."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Library"],
+        "summary": "Update a library entry",
+        "description": "Updates one personal library entry by MongoDB ID. Requires authentication.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the library entry.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LibraryInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Library entry updated successfully."
+          },
+          "400": {
+            "description": "Invalid library entry ID or invalid library data."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Library entry not found."
+          },
+          "500": {
+            "description": "Failed to update library entry."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Library"],
+        "summary": "Delete a library entry",
+        "description": "Deletes one personal library entry by MongoDB ID. Requires authentication.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ID of the library entry.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Library entry deleted successfully."
+          },
+          "400": {
+            "description": "Invalid library entry ID format."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "404": {
+            "description": "Library entry not found."
+          },
+          "500": {
+            "description": "Failed to delete library entry."
+          }
+        }
+      }
     }
+
 
   },
   "components": {
@@ -1067,7 +1237,75 @@
             "example": "A hybrid home and handheld gaming console from Nintendo."
           }
         }
+      },
+      "ReviewInput": {
+        "type": "object",
+         "properties": {
+         "gameId": {
+           "type": "string",
+           "example": "665f1b2c9d3e4a0012ab34bb"
+         },
+          "rating": {
+           "type": "number",
+           "minimum": 1,
+            "maximum": 5,
+           "example": 5
+         },
+         "reviewText": {
+           "type": "string",
+           "example": "Amazing game!"
+         },
+         "recommend": {
+            "type": "boolean",
+           "example": true
+          }
+       }
+      },
+    
+      "LibraryInput": {
+        "type": "object",
+        "required": [
+          "gameId",
+          "status"
+        ],
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "description": "MongoDB ID of the game being saved.",
+            "example": "665f1b2c9d3e4a0012ab34bb"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "playing",
+              "completed",
+              "backlog",
+              "abandoned"
+            ],
+            "example": "playing"
+          },
+          "favorite": {
+            "type": "boolean",
+            "example": true
+          },
+          "personalRating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "example": 5
+          },
+          "notes": {
+            "type": "string",
+            "example": "Currently working through the main story."
+          },
+          "hoursPlayed": {
+            "type": "number",
+            "minimum": 0,
+            "example": 18
+          }
+        }
       }
+
     }
   }
 }
