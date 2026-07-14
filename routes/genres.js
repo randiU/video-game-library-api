@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const genresController = require('../controllers/genresController');
+const { isAuthenticated } = require('../middleware/authenticate');
 
 router.get('/', genresController.getAllGenres);
 router.get('/:id', genresController.getGenreById);
-router.post('/', genresController.createGenre);
-router.put('/:id', genresController.updateGenre);
-router.delete('/:id', genresController.deleteGenre);
+
+// these need login
+router.post('/', isAuthenticated, genresController.createGenre);
+router.put('/:id', isAuthenticated, genresController.updateGenre);
+router.delete('/:id', isAuthenticated, genresController.deleteGenre);
 
 module.exports = router;
