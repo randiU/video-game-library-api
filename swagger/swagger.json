@@ -279,7 +279,8 @@
       "post": {
         "tags": ["Games"],
         "summary": "Create a game",
-        "description": "Creates a new video game record.",
+        "description": "Creates a new video game record. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -296,6 +297,9 @@
           },
           "400": {
             "description": "Invalid game data."
+          },
+          "401": {
+            "description": "Authentication required."
           }
         }
       }
@@ -334,7 +338,8 @@
       "put": {
         "tags": ["Games"],
         "summary": "Update a game",
-        "description": "Updates one video game record by MongoDB ID.",
+        "description": "Updates one video game record by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -363,6 +368,9 @@
           "400": {
             "description": "Invalid game ID or invalid game data."
           },
+          "401": {
+            "description": "Authentication required."
+          },
           "404": {
             "description": "Game not found."
           },
@@ -374,7 +382,8 @@
       "delete": {
         "tags": ["Games"],
         "summary": "Delete a game",
-        "description": "Deletes one video game record by MongoDB ID.",
+        "description": "Deletes one video game record by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -392,6 +401,9 @@
           },
           "400": {
             "description": "Invalid game ID format."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
             "description": "Game not found."
@@ -419,7 +431,8 @@
       "post": {
         "tags": ["Genres"],
         "summary": "Create a genre",
-        "description": "Creates a new video game genre.",
+        "description": "Creates a new video game genre. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -436,6 +449,9 @@
           },
           "400": {
             "description": "Invalid genre data."
+          },
+          "401": {
+            "description": "Authentication required."
           }
         }
       }
@@ -474,7 +490,8 @@
       "put": {
         "tags": ["Genres"],
         "summary": "Update a genre",
-        "description": "Updates one genre by MongoDB ID.",
+        "description": "Updates one genre by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -503,6 +520,9 @@
           "400": {
             "description": "Invalid genre ID or invalid genre data."
           },
+          "401": {
+            "description": "Authentication required."
+          },
           "404": {
             "description": "Genre not found."
           },
@@ -514,7 +534,8 @@
       "delete": {
         "tags": ["Genres"],
         "summary": "Delete a genre",
-        "description": "Deletes one genre by MongoDB ID.",
+        "description": "Deletes one genre by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -532,6 +553,9 @@
           },
           "400": {
             "description": "Invalid genre ID format."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
             "description": "Genre not found."
@@ -559,7 +583,8 @@
       "post": {
         "tags": ["Platforms"],
         "summary": "Create a platform",
-        "description": "Creates a new video game platform.",
+        "description": "Creates a new video game platform. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -576,6 +601,9 @@
           },
           "400": {
             "description": "Invalid platform data."
+          },
+          "401": {
+            "description": "Authentication required."
           }
         }
       }
@@ -614,7 +642,8 @@
       "put": {
         "tags": ["Platforms"],
         "summary": "Update a platform",
-        "description": "Updates one platform by MongoDB ID.",
+        "description": "Updates one platform by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -643,6 +672,9 @@
           "400": {
             "description": "Invalid platform ID or invalid platform data."
           },
+          "401": {
+            "description": "Authentication required."
+          },
           "404": {
             "description": "Platform not found."
           },
@@ -654,7 +686,8 @@
       "delete": {
         "tags": ["Platforms"],
         "summary": "Delete a platform",
-        "description": "Deletes one platform by MongoDB ID.",
+        "description": "Deletes one platform by MongoDB ID. Requires authentication.",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -672,6 +705,9 @@
           },
           "400": {
             "description": "Invalid platform ID format."
+          },
+          "401": {
+            "description": "Authentication required."
           },
           "404": {
             "description": "Platform not found."
